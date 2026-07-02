@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg: #0f0f1a;
+    --color-surface: #1a1a2e;
+    --color-surface-light: #252542;
+    --color-primary: #7c6bff;
+    --color-primary-light: #9b8fff;
+    --color-accent: #ff6b9d;
+    --color-text: #e8e8f0;
+    --color-text-muted: #8888a0;
+    --color-border: #2a2a4a;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+  }
+}
+
+@layer components {
+  .mask-card {
+    @apply rounded-2xl p-4;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+  }
+
+  .mask-input {
+    @apply rounded-xl px-4 py-3 outline-none;
+    background: var(--color-surface-light);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+  }
+
+  .mask-input:focus {
+    border-color: var(--color-primary);
+  }
+
+  .mask-btn {
+    @apply rounded-xl px-6 py-3 font-medium transition-all;
+    background: var(--color-primary);
+    color: white;
+  }
+
+  .mask-btn:hover {
+    background: var(--color-primary-light);
+    transform: translateY(-1px);
+  }
+
+  .mask-btn-secondary {
+    @apply rounded-xl px-6 py-3 font-medium transition-all;
+    background: var(--color-surface-light);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+  }
+
+  .mask-btn-secondary:hover {
+    border-color: var(--color-primary);
+  }
+}
