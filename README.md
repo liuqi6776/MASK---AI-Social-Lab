@@ -1,6 +1,6 @@
-# 🎭 MASK - AI Social Lab
+# 🎭 MASK — AI 图灵竞技场
 
-> AI角色互动实验场 · 社交图灵测试 · 心情社区
+> 社交推理游戏：造一张面具，骗过人类，识破 AI
 
 <p align="center">
   <img src="assets/logo.png" alt="MASK Logo" width="120">
@@ -15,16 +15,39 @@
 
 ---
 
-## 📖 项目介绍
+## ⚠️ 重要说明：产品已按评审重构（2026-07-03）
 
-MASK 是一个创新的 AI 角色互动实验平台。在这里，你可以：
+本项目经历了严格的产品评审（三方独立评审：作者 + GPT-5.5 + Gemini 3.1 Pro），结论如下：
 
-- 🎨 **创建 AI 角色** — 赋予它们独特的性格、记忆和说话风格
-- 📝 **记录每日心情** — AI 为你生成独一无二的心情插画
-- 🏛️ **分享与发现** — 在广场发布动态，与其他用户和 AI 角色互动
-- 🎮 **参与图灵测试** — 分辨对方是真人还是 AI，挑战你的洞察力
+- **原设计**（"AI 混入情绪社交平台"）→ ❌ 三颗致命炸弹：信任崩塌 + 合规红线 + 亏损经济
+- **重构后**（"用户知情同意的图灵游戏"）→ ✅ 同时绕开三颗炸弹
 
-**核心悬念**：广场上的每一次对话，对方可能是真人，也可能是 AI。你分得清吗？
+**核心改动**：
+- 砍掉：心情广场、匿名私聊、每帖 AI 生成图、向量记忆(Pinecone)
+- 保留：图灵游戏（上升为唯一核心）、面具创建（降级为游戏道具）、双分系统
+- 新增：合规开屏披露（知情同意）、战绩分享卡
+
+详见 [docs/REVIEW.md](docs/REVIEW.md) 完整评审文档。
+
+---
+
+## 📖 产品定位
+
+**MASK 是一个社交推理游戏。**
+
+和匿名对手进行 5 轮限时对话——对方可能是真人、官方 AI、或其他玩家的 AI 面具。你的任务是识破 AI，同时用你的面具骗过别人。
+
+```
+核心循环：
+① 创建面具（AI persona）→ ② 5轮限时对话 → ③ 投票猜AI/真人
+→ ④ 揭晓身份 → ⑤ 分享战绩卡 → ⑥ 再来一局
+```
+
+**为什么这个游戏能活**（评审结论）：
+- ✅ "AI 冒充人"是**游戏玩法**而非**社交平台地基**——合法、用户知情同意
+- ✅ 天然解决冷启动：AI 对手是玩法本身，不算造假
+- ✅ 收敛算力到高意图用户——不发免费图、不做无限聊天
+- ✅ 战绩卡自带病毒传播属性
 
 ---
 
@@ -34,36 +57,41 @@ MASK 是一个创新的 AI 角色互动实验平台。在这里，你可以：
 MASK---AI-Social-Lab/
 ├── mask-web/          # 前端（React + TypeScript）— MIT License
 │   ├── src/
-│   │   ├── components/   # 通用组件
-│   │   ├── pages/        # 页面组件
-│   │   │   ├── Square/      # 心情广场
-│   │   │   ├── Chat/        # 匿名聊天
-│   │   │   ├── Lab/         # AI角色工坊
-│   │   │   ├── Game/        # 图灵测试游戏
-│   │   │   └── Profile/     # 个人中心
-│   │   ├── hooks/        # 自定义 Hooks
-│   │   ├── store/        # 状态管理 (Zustand)
-│   │   ├── api/          # API 请求封装
-│   │   ├── types/        # TypeScript 类型定义
-│   │   ├── utils/        # 工具函数
-│   │   └── styles/       # 全局样式
-│   └── public/           # 静态资源
+│   │   ├── components/
+│   │   │   └── Layout.tsx     # 布局 + 合规开屏披露
+│   │   ├── pages/
+│   │   │   ├── Arena.tsx      # 🎮 图灵竞技场（核心）
+│   │   │   ├── Mask.tsx       # 🎭 面具工坊（游戏道具）
+│   │   │   └── Profile.tsx    # 🏆 个人中心（双分+战绩）
+│   │   ├── types/
+│   │   ├── utils/
+│   │   └── styles/
+│   └── public/
 │
 ├── mask-server/       # 后端（Node.js）— All Rights Reserved
 │   └── src/
 │       ├── routes/       # API 路由
-│       ├── services/     # 业务逻辑
-│       ├── models/       # 数据模型
-│       ├── middleware/   # 中间件
-│       ├── config/       # 配置文件
-│       └── utils/        # 工具函数
+│       │   ├── auth.ts      # 认证（手机号）
+│       │   ├── game.ts      # 图灵游戏
+│       │   ├── mask.ts      # 面具CRUD
+│       │   └── user.ts      # 用户+排行榜
+│       ├── services/
+│       │   ├── aiChat.ts    # AI对话（DeepSeek）
+│       │   ├── imageGen.ts  # 图像生成（按需）
+│       │   ├── matching.ts  # 匹配系统
+│       │   └── scoring.ts   # 计分系统
+│       ├── models/
+│       ├── middleware/
+│       └── config/
 │
-├── docs/              # 项目文档
-├── scripts/           # 部署脚本
-└── assets/            # 项目素材
+├── docs/
+│   ├── REVIEW.md          # 📋 完整产品评审文档
+│   ├── API.md             # API 接口文档
+│   └── ARCHITECTURE.md    # 系统架构设计
+└── assets/
 ```
 
-> **License 说明**：`mask-web` 目录下代码采用 MIT License 开源；`mask-server` 目录下代码保留所有权利，未经授权不得使用。
+> **License 说明**：`mask-web/*` 采用 MIT License 开源；`mask-server/*` 保留所有权利。
 
 ---
 
@@ -71,92 +99,73 @@ MASK---AI-Social-Lab/
 
 ### 环境要求
 
-- Node.js >= 18.0
-- npm >= 9.0 或 pnpm >= 8.0
-- PostgreSQL >= 15 (生产环境)
-- Redis >= 7 (生产环境)
+- Node.js >= 18
+- pnpm >= 8
+- PostgreSQL >= 15
+- Redis >= 7
 
-### 前端开发
+### 前端
 
 ```bash
 cd mask-web
 pnpm install
-pnpm dev          # 启动开发服务器 http://localhost:5173
+pnpm dev          # http://localhost:5173
 ```
 
-### 后端开发
+### 后端
 
 ```bash
 cd mask-server
 pnpm install
-cp .env.example .env   # 配置环境变量
-pnpm dev               # 启动开发服务器 http://localhost:3001
-```
-
-### 环境变量配置
-
-复制 `mask-server/.env.example` 为 `.env`，填写以下配置：
-
-```env
-# 服务器
-PORT=3001
-NODE_ENV=development
-
-# 数据库
-DATABASE_URL=postgresql://user:password@localhost:5432/mask
-REDIS_URL=redis://localhost:6379
-
-# AI API
-DEEPSEEK_API_KEY=your_deepseek_key
-DEEPSEEK_BASE_URL=https://api.deepseek.com
-
-OPENAI_API_KEY=your_openai_key
-OPENAI_BASE_URL=https://api.openai.com/v1
-
-# 图像生成
-IMAGE_PROVIDER=openai      # openai | google
-GPT_IMAGE_MODEL=gpt-image-1
-GPT_IMAGE_QUALITY=low      # low | medium | high
-
-# 内容审核
-MODERATION_PROVIDER=aliyun  # aliyun | aws
-ALIYUN_ACCESS_KEY=your_key
-ALIYUN_ACCESS_SECRET=your_secret
-
-# JWT
-JWT_SECRET=your_random_secret_key
-JWT_EXPIRES_IN=7d
-
-# 其他
-CORS_ORIGIN=http://localhost:5173
+cp .env.example .env   # 填写 API Key
+pnpm db:migrate
+pnpm dev               # http://localhost:3001
 ```
 
 ---
 
-## 📋 功能模块
+## 🎮 核心功能
 
-### 模块一：心情广场 (The Square)
+### 1. 图灵竞技场（唯一核心）
 
-- 选择心情词 → AI 生成专属插画 → 发布到广场
-- 瀑布流浏览、点赞、评论
-- 心情天气、情绪共振、时空胶囊、心情拼图
+- **5 轮对局**：每轮匹配一个匿名对手（真人/AI 混合）
+- **限时 2 分钟**：和对手对话，观察对方是否是 AI
+- **投票揭晓**：猜对 +10 分，猜错 -5 分
+- **战绩卡**："5 局识破 4 个 AI" → 分享到朋友圈/小红书
 
-### 模块二：匿名聊天 (Whisper)
+### 2. 面具工坊（游戏道具）
 
-- 基于 ID 的异步消息
-- 身份迷雾系统、真相揭示
-- AI 辅助回复、真心话模式、限时火花
+- 创建 AI 面具（persona）：名字 + 3 个性格标签 + 说话风格
+- 面具替你参加对局——目标是骗过真人玩家
+- **欺骗率统计**：你的面具骗过了多少真人
 
-### 模块三：AI 角色工坊 (The Lab)
+### 3. 双分系统
 
-- 创建和训练个性化 AI 角色
-- 角色切换、AI 养成、AI 竞技场
-- 向量记忆系统（Pinecone）
+| 分数 | 说明 | 获取方式 |
+|------|------|---------|
+| 👁️ **洞察力** | 识别 AI 的准确率 | 对局中猜对对手身份 |
+| 🎭 **欺骗力** | 面具骗过真人的频率 | 你的面具被真人误判为真人 |
 
-### 模块四：图灵测试游戏 (Turing Game)
+### 4. 合规设计（生死线）
 
-- 5 轮匿名对话挑战
-- 积分系统、排行榜、赛季制
+- **开屏披露**：首次进入明确告知"本游戏包含 AI 对手"
+- **知情同意**：用户主动确认后才可开始对局
+- **实名验证**：手机号注册（后台实名）
+- **每局揭晓**：结束后明确标注每个对手是真人还是 AI
+
+---
+
+## 💰 变现设计
+
+评审核心原则：**不靠免费无限 AI 聊天（那是 margin 陷阱）**
+
+| 付费点 | 说明 |
+|--------|------|
+| 额外对局 | 免费每天 N 局，超出付费 |
+| 面具槽位 | 多个面具需付费解锁 |
+| 高级模型 | 更强的 LLM 让你的面具更能骗人 |
+| 赛季通行证 | 排名、专属徽章 |
+| 分析报告 | "为什么别人觉得你是 AI" |
 
 ---
 
@@ -164,59 +173,44 @@ CORS_ORIGIN=http://localhost:5173
 
 | 层级 | 技术 |
 |------|------|
-| **前端** | React 19 + TypeScript + Tailwind CSS + Vite |
-| **状态管理** | Zustand |
-| **后端** | Node.js + Express + TypeScript |
-| **数据库** | PostgreSQL + Prisma ORM |
-| **缓存** | Redis |
-| **AI 对话** | DeepSeek V3.2 (主力) / GPT-5.2 (高端) |
-| **图像生成** | GPT Image Mini / Google Imagen 4 |
-| **向量数据库** | Pinecone (AI 角色记忆) |
-| **消息队列** | BullMQ (Redis-based) |
-| **内容审核** | 阿里云绿网 / AWS Comprehend |
-| **部署** | Docker + GitHub Actions |
+| 前端 | React 19 + TypeScript + Tailwind CSS + Vite |
+| 状态管理 | Zustand |
+| 后端 | Node.js + Express + TypeScript |
+| 数据库 | PostgreSQL + Prisma |
+| 缓存 | Redis |
+| AI 对话 | DeepSeek V3.2 |
+| 图像生成 | 按需调用（非每帖必生成）|
+| ~~向量数据库~~ | ~~Pinecone~~（评审砍掉，MVP 先无状态）|
 
 ---
 
 ## 📚 文档
 
+- [产品评审文档](docs/REVIEW.md) — 三方评审完整记录
 - [API 接口文档](docs/API.md)
-- [系统架构设计](docs/ARCHITECTURE.md)
-- [数据库设计](docs/DATABASE.md)
-- [部署指南](docs/DEPLOYMENT.md)
-- [贡献指南](CONTRIBUTING.md)
-
----
-
-## 🗺️ 路线图
-
-| 阶段 | 时间 | 目标 |
-|------|------|------|
-| Phase 0 | Week 1-2 | 环境搭建、UI 设计、数据库设计 |
-| Phase 1 | Week 3-8 | MVP 开发（Web 版核心功能） |
-| Phase 2 | Week 9-12 | 内测（200 种子用户） |
-| Phase 3 | Week 13-16 | 公测 + Google Play 上线 |
-| Phase 4 | Week 17-26 | 增长迭代 + 商业化 |
+- [系统架构](docs/ARCHITECTURE.md)
 
 ---
 
 ## 🤝 贡献
 
-我们欢迎社区贡献！请参考 [CONTRIBUTING.md](CONTRIBUTING.md) 了解如何参与。
-
-> 注意：我们接受前端 (`mask-web`) 的代码贡献。后端 (`mask-server`) 目前不接受外部贡献。
+欢迎前端代码贡献！请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ---
 
 ## 📄 License
 
-本项目采用分段 License：
-
 - **前端代码** (`mask-web/*`)：[MIT License](LICENSE) © 2026 LIU QI
-- **后端代码** (`mask-server/*`)：All Rights Reserved，未经授权不得使用
-- **商业计划书及文档** (`docs/` `*.md`)：All Rights Reserved
+- **后端代码** (`mask-server/*`)：All Rights Reserved
+- **评审文档** (`docs/REVIEW.md`)：开源分享，欢迎引用
 
 ---
+
+> *"把'AI 冒充人'从违法的社交默认态，变成合法的、用户同意的游戏机制。"*
+>
+> *如果这个窄游戏都留不住人，那个大而全的版本更不可能。*
+>
+> *先证明游戏成立，再向角色创建、主题房间、创作者生态扩展。*
 
 <p align="center">
   Made with ❤️ by <a href="https://github.com/liuqi6776">LIU QI</a>
