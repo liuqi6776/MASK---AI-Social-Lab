@@ -135,16 +135,16 @@ function ConsentModal({ onAccept }: { onAccept: () => void }) {
             ⚠️ 重要说明（请仔细阅读）
           </p>
           <p>
-            本游戏中，<strong>部分对手是 AI</strong>。你的任务是识别出谁是真人、谁是 AI。
+            本游戏中，<strong>部分对手是 AI</strong>（官方 AI 或其他玩家的面具）。你的任务是识别他们。
           </p>
           <p>
-            你也可以创建自己的<strong>AI 面具（persona）</strong>，让它代替你参与对局——目标是骗过其他真人玩家。
+            你也可以创建自己的<strong>AI 面具（persona）</strong>，它只在你离线时参加别人的对局——目标是骗过其他真人玩家。
           </p>
           <p>
             每一局结束后，系统会揭晓每个对手的真实身份（真人 / AI）。
           </p>
           <p style={{ color: 'var(--color-text-muted)' }}>
-            游戏中所有 AI 生成的内容均已在相关场景标注。
+            对局中对手身份隐藏，对局结束后揭示哪些内容由 AI 生成。
           </p>
         </div>
 
